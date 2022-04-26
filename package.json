@@ -1,0 +1,24 @@
+{
+  "name": "netcup-node",
+  "version": "0.0.1",
+  "description": "A node wrapper for the Netcup CCP API (https://www.netcup-wiki.de/wiki/CCP_API)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proohit/netcup-node.git"
+  },
+  "keywords": [
+    "node",
+    "netcup",
+    "ccp"
+  ],
+  "author": "proohit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/proohit/netcup-node/issues"
+  },
+  "homepage": "https://github.com/proohit/netcup-node#readme"
+}
