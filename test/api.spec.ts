@@ -1,15 +1,15 @@
 import { Formats } from '../src/@types/Formats';
 import { ApiResponse } from '../src/@types/Responses';
-import NetcupApi from '../src/api';
+import NetcupRestApi from '../src/api';
 import { createEmptyApiResponse } from './testUtils';
 
 describe('Api functions', () => {
   it('should set format correctly', () => {
-    const api = new NetcupApi(Formats.JSON);
+    const api = new NetcupRestApi(Formats.JSON);
     expect(api.format).toBe(Formats.JSON);
   });
   it("should set default format to 'JSON'", () => {
-    const api = new NetcupApi();
+    const api = new NetcupRestApi();
     expect(api.format).toBe(Formats.JSON);
   });
   it('should throw in error case', async () => {
@@ -19,7 +19,7 @@ describe('Api functions', () => {
       statuscode: 4010,
       longmessage: 'testError',
     };
-    const api = new NetcupApi();
+    const api = new NetcupRestApi();
 
     expect(() =>
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

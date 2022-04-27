@@ -2,58 +2,58 @@ import { NetcupAuth } from './@types/NetcupAuth';
 import { Formats } from './@types/Formats';
 import { InfoDNSZoneParam } from './@types/Requests';
 import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
-import NetcupApi from './api';
+import NetcupRestApi from './api';
 import { missingAuth } from './utils';
 import { InitParams } from './@types/InitParams';
-const authData: NetcupAuth = {
-  apiKey: '',
-  apiPassword: '',
-  customerNumber: '',
-  apiSessionId: '',
-};
+import { INVALID_FORMAT_ERROR, NOT_INITIALIZED_ERROR } from './constants';
+export default class NetcupApi {
+  private authData: NetcupAuth = {
+    apiKey: '',
+    apiPassword: '',
+    customerNumber: '',
+    apiSessionId: '',
+  };
+  public readonly restApi: NetcupRestApi = new NetcupRestApi();
 
-async function checkAndRefreshAuth() {
-  if (missingAuth(authData)) {
-    throw new Error('Not initialized. Call init() first.');
-  } else {
-    await init({
-      format: netcuApi.format,
-      apikey: authData.apiKey,
-      apipassword: authData.apiPassword,
-      customernumber: authData.customerNumber,
+  private async checkAndRefreshAuth() {
+    if (missingAuth(this.authData)) {
+      throw new Error(NOT_INITIALIZED_ERROR);
+    } else {
+      await this.init({
+        format: this.restApi.format,
+        apikey: this.authData.apiKey,
+        apipassword: this.authData.apiPassword,
+        customernumber: this.authData.customerNumber,
+      });
+    }
+  }
+
+  public async init(params: InitParams): Promise<NetcupApi> {
+    if (params.format && !Object.values(Formats).includes(params.format)) {
+      throw new Error(INVALID_FORMAT_ERROR);
+    }
+    this.restApi.format = params.format || Formats.JSON;
+    const res: LoginResponse = await this.restApi.login(params);
+    this.authData.apiKey = params.apikey;
+    this.authData.apiPassword = params.apipassword;
+    this.authData.customerNumber = params.customernumber;
+    this.authData.apiSessionId = res.responsedata.apisessionid;
+    return this;
+  }
+
+  public async infoDnsZone(
+    params: InfoDNSZoneParam,
+  ): Promise<InfoDNSZoneResponse> {
+    await this.checkAndRefreshAuth();
+    return this.restApi.infoDnsZone({
+      ...params,
+      apisessionid: this.authData.apiSessionId,
+      customernumber: this.authData.customerNumber,
+      apikey: this.authData.apiKey,
     });
   }
-}
 
-export const netcuApi: NetcupApi = new NetcupApi();
-
-export async function init(params: InitParams): Promise<LoginResponse> {
-  if (params.format && !Object.values(Formats).includes(params.format)) {
-    throw new Error(
-      'Invalid format. Valid formats are: ' + Object.values(Formats).join(', '),
-    );
+  public getAuthData(): NetcupAuth {
+    return this.authData;
   }
-  netcuApi.format = params.format || Formats.JSON;
-  const res: LoginResponse = await netcuApi.login(params);
-  authData.apiKey = params.apikey;
-  authData.apiPassword = params.apipassword;
-  authData.customerNumber = params.customernumber;
-  authData.apiSessionId = res.responsedata.apisessionid;
-  return res;
-}
-
-export async function infoDnsZone(
-  params: InfoDNSZoneParam,
-): Promise<InfoDNSZoneResponse> {
-  await checkAndRefreshAuth();
-  return netcuApi.infoDnsZone({
-    ...params,
-    apisessionid: authData.apiSessionId,
-    customernumber: authData.customerNumber,
-    apikey: authData.apiKey,
-  });
-}
-
-export function getAuthData(): NetcupAuth {
-  return authData;
 }

@@ -17,7 +17,7 @@ export function defaultResponseHandler(response: AxiosResponse) {
   return response;
 }
 
-export default class NetcupApi {
+export default class NetcupRestApi {
   axios = axios.create();
   format: Formats = Formats.JSON;
 
