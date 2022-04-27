@@ -12,7 +12,7 @@ import { getFormattedUrl } from './utils';
 
 export default class NetcupApi {
   private axios = axios.create();
-  readonly format: Formats = Formats.JSON;
+  format: Formats = Formats.JSON;
 
   constructor(format?: Formats) {
     if (format) {

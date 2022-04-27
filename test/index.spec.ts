@@ -1,30 +1,26 @@
-import { Api } from '../src/api';
-import { init } from '../src/index';
+import { getAuthData, init, netcuApi } from '../src/index';
+import { createEmptyLoginResponse } from './testUtils';
 
 describe('exported functions', () => {
   it('should initialize correctly', async () => {
-    jest.spyOn(Api, 'postJson').mockImplementation(() =>
+    jest.spyOn(netcuApi, 'login').mockImplementation(() =>
       Promise.resolve({
-        responsedata: {
-          apisessionid: '123',
-        },
+        ...createEmptyLoginResponse(),
+        responsedata: { apisessionid: 'testSession' },
       }),
     );
-
-    expect(
-      init({
-        apikey: '',
-        apipassword: '',
-        customernumber: '',
-      }),
-    ).toBeInstanceOf(Promise);
-
-    const apiSessionId = await init({
-      apikey: '',
-      apipassword: '',
-      customernumber: '',
+    const givenAuthData = {
+      apikey: 'testKey',
+      apipassword: 'testPw',
+      customernumber: '1234',
+    };
+    const initResult = await init(givenAuthData);
+    expect(initResult).toBeDefined();
+    expect(getAuthData()).toEqual({
+      apiKey: givenAuthData.apikey,
+      apiPassword: givenAuthData.apipassword,
+      customerNumber: givenAuthData.customernumber,
+      apiSessionId: initResult.responsedata.apisessionid,
     });
-
-    expect(apiSessionId).not.toBe('');
   });
 });
