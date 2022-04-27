@@ -1,4 +1,6 @@
-export interface LoginResponse {
+import { Actions } from './Actions';
+
+export interface ApiResponse {
   serverrequestid: string;
   clientrequestid: string;
   action: string;
@@ -6,6 +8,11 @@ export interface LoginResponse {
   statuscode: number;
   shortmessage: string;
   longmessage: string;
+  responsedata: unknown;
+}
+
+export interface LoginResponse extends ApiResponse {
+  action: Actions.login;
   responsedata: LoginResponsedata;
 }
 

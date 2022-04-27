@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Actions } from './@types/Actions';
 import { Formats } from './@types/Formats';
 import {
@@ -10,8 +10,15 @@ import {
 import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
 import { getFormattedUrl } from './utils';
 
+export function defaultResponseHandler(response: AxiosResponse) {
+  if (response.data && response.data.statuscode !== 2000) {
+    throw new Error(response.data.longmessage);
+  }
+  return response;
+}
+
 export default class NetcupApi {
-  private axios = axios.create();
+  axios = axios.create();
   format: Formats = Formats.JSON;
 
   constructor(format?: Formats) {
@@ -19,27 +26,7 @@ export default class NetcupApi {
       this.format = format;
     }
 
-    this.axios.interceptors.response.use(
-      (response) => {
-        if (response.data && response.data.statuscode !== 2000) {
-          throw new Error(response.data.longmessage);
-        }
-        return response;
-      },
-      (error) => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-        return Promise.reject(error);
-      },
-    );
+    this.axios.interceptors.response.use(defaultResponseHandler);
   }
 
   protected async postJson<Req, Res>(
