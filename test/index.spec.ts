@@ -12,9 +12,6 @@ describe('exported functions', () => {
     apipassword: 'testPw',
     customernumber: '1234',
   };
-  beforeEach(async () => {
-    jest.clearAllMocks();
-  });
   describe('init tests', () => {
     it('should initialize correctly', async () => {
       const netcupApi = new NetcupApi();
@@ -32,6 +29,7 @@ describe('exported functions', () => {
       await expect(() =>
         new NetcupApi().init({
           ...givenAuthData,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           format: 'invalidFormat',
         }),
