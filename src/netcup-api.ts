@@ -42,4 +42,16 @@ export class NetcupApi extends Api {
       },
     );
   }
+
+  public infoDnsRecords(params: InfoDNSZoneParam) {
+    return this.postJson<InfoDNSZoneRequest, InfoDNSZoneResponse>(
+      getFormattedUrl(this.format),
+      {
+        action: Actions.infoDnsRecords,
+        param: {
+          ...params,
+        },
+      },
+    );
+  }
 }
