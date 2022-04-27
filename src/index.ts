@@ -1,9 +1,14 @@
 import { Actions } from './@types/Actions';
 import { AuthData } from './@types/AuthData';
 import { Formats } from './@types/Formats';
-import { InfoDNSZoneParam, LoginParam } from './@types/Requests';
+import {
+  InfoDNSZoneParam,
+  InfoDNSZoneRequest,
+  LoginParam,
+  LoginRequest,
+} from './@types/Requests';
 import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
-import { Api } from './Api';
+import { Api } from './api';
 import { getFormattedUrl } from './utils';
 
 const authData: AuthData = {
@@ -14,15 +19,13 @@ const authData: AuthData = {
 };
 
 export async function init(params: LoginParam): Promise<string> {
-  const res: LoginResponse = await Api.postJson<LoginResponse>(
+  const res: LoginResponse = await Api.postJson<LoginRequest, LoginResponse>(
     getFormattedUrl(Formats.JSON),
     {
-      body: JSON.stringify({
-        action: Actions.login,
-        param: {
-          ...params,
-        },
-      }),
+      action: Actions.login,
+      param: {
+        ...params,
+      },
     },
   );
   authData.apiKey = params.apikey;
@@ -38,8 +41,9 @@ export function infoDnsZone(
   if (!authData.apiSessionId) {
     throw new Error('Api session id is not set');
   }
-  return Api.postJson(getFormattedUrl(Formats.JSON), {
-    body: JSON.stringify({
+  return Api.postJson<InfoDNSZoneRequest, InfoDNSZoneResponse>(
+    getFormattedUrl(Formats.JSON),
+    {
       action: Actions.infoDnsZone,
       param: {
         apikey: authData.apiKey,
@@ -47,6 +51,6 @@ export function infoDnsZone(
         customernumber: authData.customerNumber,
         ...params,
       },
-    }),
-  });
+    },
+  );
 }
