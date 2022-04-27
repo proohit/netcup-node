@@ -1,7 +1,15 @@
+import { Api } from '../src/api';
 import { init } from '../src/index';
 
-describe('init', () => {
+describe('exported functions', () => {
   it('should initialize correctly', async () => {
+    const spy = jest.spyOn(Api, 'postJson').mockImplementation(() =>
+      Promise.resolve({
+        responsedata: {
+          apisessionid: '123',
+        },
+      }),
+    );
     expect(
       init({
         apikey: '',
@@ -9,13 +17,11 @@ describe('init', () => {
         customernumber: '',
       }),
     ).toBeInstanceOf(Promise);
-
     const apiSessionId = await init({
       apikey: '',
       apipassword: '',
       customernumber: '',
     });
-    console.log(apiSessionId);
     expect(apiSessionId).not.toBe('');
   });
 });
