@@ -1,18 +1,29 @@
 import { NetcupAuth } from './@types/NetcupAuth';
 import { Formats } from './@types/Formats';
-import { InfoDNSZoneParam, LoginParam } from './@types/Requests';
+import { InfoDNSZoneParam } from './@types/Requests';
 import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
 import NetcupApi from './api';
-interface InitParams extends LoginParam {
-  format?: Formats;
-}
-
+import { missingAuth } from './utils';
+import { InitParams } from './@types/InitParams';
 const authData: NetcupAuth = {
   apiKey: '',
   apiPassword: '',
   customerNumber: '',
   apiSessionId: '',
 };
+
+async function checkAndRefreshAuth() {
+  if (missingAuth(authData)) {
+    throw new Error('Not initialized. Call init() first.');
+  } else {
+    await init({
+      format: netcuApi.format,
+      apikey: authData.apiKey,
+      apipassword: authData.apiPassword,
+      customernumber: authData.customerNumber,
+    });
+  }
+}
 
 export const netcuApi: NetcupApi = new NetcupApi();
 
@@ -31,9 +42,10 @@ export async function init(params: InitParams): Promise<LoginResponse> {
   return res;
 }
 
-export function infoDnsZone(
+export async function infoDnsZone(
   params: InfoDNSZoneParam,
 ): Promise<InfoDNSZoneResponse> {
+  await checkAndRefreshAuth();
   return netcuApi.infoDnsZone({
     ...params,
     apisessionid: authData.apiSessionId,
