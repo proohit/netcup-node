@@ -1,56 +1,42 @@
-import { Actions } from './@types/Actions';
-import { AuthData } from './@types/AuthData';
+import { NetcupAuth } from './@types/NetcupAuth';
 import { Formats } from './@types/Formats';
-import {
-  InfoDNSZoneParam,
-  InfoDNSZoneRequest,
-  LoginParam,
-  LoginRequest,
-} from './@types/Requests';
+import { InfoDNSZoneParam, LoginParam } from './@types/Requests';
 import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
-import { Api } from './api';
-import { getFormattedUrl } from './utils';
+import { NetcupApi } from './netcup-api';
+interface InitParams extends LoginParam {
+  format?: Formats;
+}
 
-const authData: AuthData = {
+const authData: NetcupAuth = {
   apiKey: '',
   apiPassword: '',
   customerNumber: '',
   apiSessionId: '',
 };
 
-export async function init(params: LoginParam): Promise<string> {
-  const res: LoginResponse = await Api.postJson<LoginRequest, LoginResponse>(
-    getFormattedUrl(Formats.JSON),
-    {
-      action: Actions.login,
-      param: {
-        ...params,
-      },
-    },
-  );
+let netcuApi: NetcupApi;
+
+export async function init(params: InitParams): Promise<LoginResponse> {
+  netcuApi = new NetcupApi(params.format);
+  const res: LoginResponse = await netcuApi.login(params);
   authData.apiKey = params.apikey;
   authData.apiPassword = params.apipassword;
   authData.customerNumber = params.customernumber;
   authData.apiSessionId = res.responsedata.apisessionid;
-  return authData.apiSessionId;
+  return res;
 }
 
 export function infoDnsZone(
   params: InfoDNSZoneParam,
 ): Promise<InfoDNSZoneResponse> {
-  if (!authData.apiSessionId) {
-    throw new Error('Api session id is not set');
-  }
-  return Api.postJson<InfoDNSZoneRequest, InfoDNSZoneResponse>(
-    getFormattedUrl(Formats.JSON),
-    {
-      action: Actions.infoDnsZone,
-      param: {
-        apikey: authData.apiKey,
-        apisessionid: authData.apiSessionId,
-        customernumber: authData.customerNumber,
-        ...params,
-      },
-    },
-  );
+  return netcuApi.infoDnsZone({
+    ...params,
+    apisessionid: authData.apiSessionId,
+    customernumber: authData.customerNumber,
+    apikey: authData.apiKey,
+  });
+}
+
+export function getAuthData(): NetcupAuth {
+  return authData;
 }
