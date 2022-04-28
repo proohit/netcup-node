@@ -1,6 +1,6 @@
 {
   "name": "netcup-node",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A node wrapper for the Netcup CCP API (https://www.netcup-wiki.de/wiki/CCP_API)",
   "author": "proohit <direnc99@gmail.com>",
   "license": "MIT",
