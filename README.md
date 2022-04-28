@@ -1,8 +1,12 @@
 # Netcup-node
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/proohit/netcup-node)](https://github.com/proohit/netcup-node)
 [![codecov](https://codecov.io/gh/proohit/netcup-node/branch/master/graph/badge.svg?token=QM9CHTM8UL)](https://codecov.io/gh/proohit/netcup-node)
+[![Known Vulnerabilities](https://snyk.io/test/github/proohit/netcup-node/badge.svg)](https://snyk.io/test/github/proohit/netcup-node)
 [![build](https://github.com/proohit/netcup-node/actions/workflows/build.yml/badge.svg)](https://github.com/proohit/netcup-node/actions/workflows/build.yml)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=proohit_netcup-node&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=proohit_netcup-node)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=proohit_netcup-node&metric=bugs)](https://sonarcloud.io/summary/new_code?id=proohit_netcup-node)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=proohit_netcup-node&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=proohit_netcup-node)
+[![GitHub last commit](https://img.shields.io/github/last-commit/proohit/netcup-node)](https://github.com/proohit/netcup-node)
 [![npm](https://img.shields.io/npm/v/netcup-node?color=blue)](https://www.npmjs.com/package/netcup-node)
 [![npm](https://img.shields.io/npm/dt/netcup-node)](https://www.npmjs.com/package/netcup-node)
 
