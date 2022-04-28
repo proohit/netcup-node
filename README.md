@@ -15,6 +15,7 @@ A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API)
 ## Current support
 
 - only [JSON Rest API](https://www.netcup-wiki.de/wiki/CCP_API#Anmerkungen_zu_JSON-Requests), no SOAP yet
+- auto auth handling with support to use custom auth handling
 - functions
   - `login`
   - `infoDnsZone`
@@ -29,14 +30,44 @@ A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API)
 npm install --save netcup-node
 ```
 
+### Authentication
+
+You will also need three things from Netcup CCP:
+
+- apikey
+- apipassword
+- customernumber
+
+After logging in to [Netcup CCP](https://www.customercontrolpanel.de/), navigate to [Stammdaten](https://www.customercontrolpanel.de/daten_aendern.php) and create the key/password there. The customernumber is next to your name at the top of the CCP.
+
 ### Usage
+
+The default exported `NetcupApi` is a wrapper around the actual api. It handles authentication and passes parameters to the implemented api.
 
 ```javascript
 import NetcupApi from 'netcup-node';
 const api = await new Netcup().init({
+  apikey: 'YOUR_API_KEY',
+  apipassword: 'YOUR_API_PASSWORD',
+  customernumber: 'YOUR_CUSTOMER_NUMBER',
+});
+const dnsInfo = await api.infoDnsZone({ domainname: 'YOUR.DOMAIN' });
+```
+
+If you prefer, you can use the `NetcupRestApi` directly, without using the integrated authentication state handling from the default exported `NetcupApi`.
+
+```javascript
+import { NetcupRestApi } from 'netcup-node';
+const api = new NetcupRestApi();
+const authResponse = await api.login({
   apikey: '',
   apipassword: '',
   customernumber: '',
 });
-const dnsInfo = await api.infoDnsZone({ domainname: 'YOUR.DOMAIN' });
+const dnsRecords = await api.infoDnsRecords({
+  apisessionid: authResponse.responsedata.apisessionid,
+  apikey: 'YOUR_API_KEY',
+  customernumber: 'YOUR_CUSTOMER_NUMBER',
+  domainname: 'YOUR.DOMAIN',
+});
 ```
