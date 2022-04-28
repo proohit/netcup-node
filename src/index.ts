@@ -1,5 +1,6 @@
-import { NetcupAuth } from './@types/NetcupAuth';
 import { Formats } from './@types/Formats';
+import { InitParams } from './@types/InitParams';
+import { NetcupAuth } from './@types/NetcupAuth';
 import { InfoDNSRecordsParam, InfoDNSZoneParam } from './@types/Requests';
 import {
   InfoDNSRecordsResponse,
@@ -7,10 +8,10 @@ import {
   LoginResponse,
 } from './@types/Responses';
 import NetcupRestApi from './api';
-import { missingAuth } from './utils';
-import { InitParams } from './@types/InitParams';
 import { INVALID_FORMAT_ERROR, NOT_INITIALIZED_ERROR } from './constants';
-export default class NetcupApi {
+import { missingAuth } from './utils';
+
+class NetcupApi {
   private authData: NetcupAuth = {
     apiKey: '',
     apiPassword: '',
@@ -73,3 +74,14 @@ export default class NetcupApi {
     return this.authData;
   }
 }
+
+// EXPORTS
+
+export * from './@types/Formats';
+export * from './@types/InitParams';
+export * from './@types/NetcupAuth';
+export * from './@types/Requests';
+export * from './@types/Responses';
+export { NetcupRestApi };
+
+export default NetcupApi;
