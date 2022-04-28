@@ -1,14 +1,52 @@
 import { Formats } from '../src/@types/Formats';
-import { ApiResponse, InfoDNSZoneResponse } from '../src/@types/Responses';
+import {
+  ApiResponse,
+  InfoDNSRecordsResponse,
+  InfoDNSZoneResponse,
+} from '../src/@types/Responses';
 import NetcupRestApi from '../src/api';
 import {
   createEmptyApiResponse,
+  createEmptyInfoDnsRecordsResponse,
   createEmptyInfoDnsZoneResponse,
   createEmptyLoginResponse,
 } from './testUtils';
 
 describe('Api functions', () => {
   describe('rest api methods tests', () => {
+    it('infoDnsRecords', async () => {
+      const api = new NetcupRestApi();
+      const emptyResponse = createEmptyInfoDnsRecordsResponse();
+      const givenResponse: InfoDNSRecordsResponse = {
+        ...emptyResponse,
+        statuscode: 2000,
+        responsedata: {
+          ...emptyResponse.responsedata,
+          dnsrecords: [
+            {
+              id: '1',
+              hostname: 'www',
+              type: 'A',
+              state: 'yes',
+              priority: '',
+              deleterecord: false,
+              destination: '192.168.178.1',
+            },
+          ],
+        },
+      };
+      jest
+        .spyOn(api.axios, 'post')
+        .mockReturnValue(Promise.resolve({ data: givenResponse }));
+
+      const res = await api.infoDnsRecords({
+        domainname: 'test.com',
+        customernumber: '',
+        apikey: '',
+        apisessionid: '',
+      });
+      expect(res).toEqual(givenResponse);
+    });
     it('infoDnsZone', async () => {
       const api = new NetcupRestApi();
       const emptyResponse = createEmptyInfoDnsZoneResponse();
