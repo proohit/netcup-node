@@ -2,12 +2,18 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Actions } from './@types/Actions';
 import { Formats } from './@types/Formats';
 import {
+  InfoDNSRecordsParam,
+  InfoDNSRecordsRequest,
   InfoDNSZoneParam,
   InfoDNSZoneRequest,
   LoginParam,
   LoginRequest,
 } from './@types/Requests';
-import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
+import {
+  InfoDNSRecordsResponse,
+  InfoDNSZoneResponse,
+  LoginResponse,
+} from './@types/Responses';
 import { getFormattedUrl } from './utils';
 
 export function defaultResponseHandler(response: AxiosResponse) {
@@ -65,8 +71,8 @@ export default class NetcupRestApi {
     );
   }
 
-  public infoDnsRecords(params: InfoDNSZoneParam) {
-    return this.postJson<InfoDNSZoneRequest, InfoDNSZoneResponse>(
+  public infoDnsRecords(params: InfoDNSRecordsParam) {
+    return this.postJson<InfoDNSRecordsRequest, InfoDNSRecordsResponse>(
       getFormattedUrl(this.format),
       {
         action: Actions.infoDnsRecords,

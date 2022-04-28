@@ -24,7 +24,12 @@ describe('Api functions', () => {
         .spyOn(api.axios, 'post')
         .mockReturnValue(Promise.resolve({ data: givenResponse }));
 
-      const res = await api.infoDnsZone({ domainname: 'test.com' });
+      const res = await api.infoDnsZone({
+        domainname: 'test.com',
+        customernumber: '',
+        apikey: '',
+        apisessionid: '',
+      });
       expect(res).toEqual(givenResponse);
     });
 

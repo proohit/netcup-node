@@ -17,9 +17,9 @@ export interface InfoDNSZoneRequest {
 
 export interface InfoDNSZoneParam {
   domainname: string;
-  customernumber?: string;
-  apikey?: string;
-  apisessionid?: string;
+  customernumber: string;
+  apikey: string;
+  apisessionid: string;
 }
 
 export interface LoginRequest {

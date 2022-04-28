@@ -1,7 +1,11 @@
 import { NetcupAuth } from './@types/NetcupAuth';
 import { Formats } from './@types/Formats';
-import { InfoDNSZoneParam } from './@types/Requests';
-import { InfoDNSZoneResponse, LoginResponse } from './@types/Responses';
+import { InfoDNSRecordsParam, InfoDNSZoneParam } from './@types/Requests';
+import {
+  InfoDNSRecordsResponse,
+  InfoDNSZoneResponse,
+  LoginResponse,
+} from './@types/Responses';
 import NetcupRestApi from './api';
 import { missingAuth } from './utils';
 import { InitParams } from './@types/InitParams';
@@ -42,14 +46,26 @@ export default class NetcupApi {
   }
 
   public async infoDnsZone(
-    params: InfoDNSZoneParam,
+    params: Pick<InfoDNSZoneParam, 'domainname'>,
   ): Promise<InfoDNSZoneResponse> {
     await this.checkAndRefreshAuth();
     return this.restApi.infoDnsZone({
-      ...params,
       apisessionid: this.authData.apiSessionId,
       customernumber: this.authData.customerNumber,
       apikey: this.authData.apiKey,
+      ...params,
+    });
+  }
+
+  public async infoDnsRecords(
+    params: Pick<InfoDNSRecordsParam, 'domainname'>,
+  ): Promise<InfoDNSRecordsResponse> {
+    await this.checkAndRefreshAuth();
+    return this.restApi.infoDnsRecords({
+      apisessionid: this.authData.apiSessionId,
+      customernumber: this.authData.customerNumber,
+      apikey: this.authData.apiKey,
+      ...params,
     });
   }
 

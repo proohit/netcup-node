@@ -41,14 +41,8 @@ export interface InfoDNSZoneResponsedata {
   dnssecstatus: boolean;
 }
 
-export interface InfoDNSRecordsResponse {
-  serverrequestid: string;
-  clientrequestid: string;
-  action: string;
-  status: string;
-  statuscode: number;
-  shortmessage: string;
-  longmessage: string;
+export interface InfoDNSRecordsResponse extends ApiResponse {
+  action: Actions.infoDnsRecords;
   responsedata: InfoDNSRecordsResponsedata;
 }
 

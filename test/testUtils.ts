@@ -2,6 +2,7 @@ import { Actions } from '../src/@types/Actions';
 import { LoginParam } from '../src/@types/Requests';
 import {
   ApiResponse,
+  InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
 } from '../src/@types/Responses';
@@ -47,6 +48,15 @@ export const createEmptyInfoDnsZoneResponse = (): InfoDNSZoneResponse => ({
     dnssecstatus: false,
   },
 });
+
+export const createEmptyInfoDnsRecordsResponse =
+  (): InfoDNSRecordsResponse => ({
+    ...createEmptyApiResponse<InfoDNSRecordsResponse>(),
+    action: Actions.infoDnsRecords,
+    responsedata: {
+      dnsrecords: [],
+    },
+  });
 
 export const givenSessionId = 'testSession';
 

@@ -1,13 +1,19 @@
 import NetcupApi from '../src';
+import { InitParams } from '../src/@types/InitParams';
+import {
+  InfoDNSRecordsResponse,
+  InfoDNSZoneResponse,
+} from '../src/@types/Responses';
 import { INVALID_FORMAT_ERROR, NOT_INITIALIZED_ERROR } from '../src/constants';
 import {
+  createEmptyInfoDnsRecordsResponse,
   createEmptyInfoDnsZoneResponse,
   givenSessionId,
   mockLoginResponse,
 } from './testUtils';
 
 describe('exported functions', () => {
-  const givenAuthData = {
+  const givenAuthData: InitParams = {
     apikey: 'testKey',
     apipassword: 'testPw',
     customernumber: '1234',
@@ -42,7 +48,7 @@ describe('exported functions', () => {
       const netcupApi = new NetcupApi();
       mockLoginResponse(netcupApi.restApi);
       await netcupApi.init(givenAuthData);
-      const givenDnsZoneInfo = {
+      const givenDnsZoneInfo: InfoDNSZoneResponse = {
         ...createEmptyInfoDnsZoneResponse(),
         responsedata: {
           name: 'test.domain.com',
@@ -66,6 +72,45 @@ describe('exported functions', () => {
     it('should throw error on dns zone without auth', async () => {
       await expect(() =>
         new NetcupApi().infoDnsZone({
+          domainname: '',
+        }),
+      ).rejects.toThrow(NOT_INITIALIZED_ERROR);
+    });
+  });
+
+  describe('infoDnsRecords tests', () => {
+    it('should return dns records correctly', async () => {
+      const netcupApi = new NetcupApi();
+      mockLoginResponse(netcupApi.restApi);
+      await netcupApi.init(givenAuthData);
+      const givenDnsRecordsInfo: InfoDNSRecordsResponse = {
+        ...createEmptyInfoDnsRecordsResponse(),
+        responsedata: {
+          dnsrecords: [
+            {
+              id: '1',
+              hostname: 'test.domain.com',
+              type: 'A',
+              destination: '192.168.178.1',
+              deleterecord: false,
+              priority: '',
+              state: 'yes',
+            },
+          ],
+        },
+      };
+      jest
+        .spyOn(netcupApi.restApi, 'infoDnsRecords')
+        .mockReturnValue(Promise.resolve(givenDnsRecordsInfo));
+      const infoDnsRecordsResult = await netcupApi.infoDnsRecords({
+        domainname: 'test.domain.com',
+      });
+      expect(infoDnsRecordsResult).toEqual(givenDnsRecordsInfo);
+    });
+
+    it('should throw error on dns zone without auth', async () => {
+      await expect(() =>
+        new NetcupApi().infoDnsRecords({
           domainname: '',
         }),
       ).rejects.toThrow(NOT_INITIALIZED_ERROR);
