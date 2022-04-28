@@ -1,6 +1,6 @@
 name: build
 
-on: [push]
+on: push
 
 jobs:
   build:
@@ -8,10 +8,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: volta-cli/action@v1
       - run: npm ci --no-audit
       - run: npm run lint --if-present
       - run: npm test
+      - uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true # optional (default = false)
       - run: npm run build --if-present
         env:
           CI: true
