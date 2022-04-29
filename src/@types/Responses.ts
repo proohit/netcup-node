@@ -28,10 +28,10 @@ export interface InfoDNSZoneResponse {
   statuscode: number;
   shortmessage: string;
   longmessage: string;
-  responsedata: InfoDNSZoneResponsedata;
+  responsedata: InfoDNSZoneResponseData;
 }
 
-export interface InfoDNSZoneResponsedata {
+export interface InfoDNSZoneResponseData {
   name: string;
   ttl: string;
   serial: string;
@@ -43,14 +43,14 @@ export interface InfoDNSZoneResponsedata {
 
 export interface InfoDNSRecordsResponse extends ApiResponse {
   action: Actions.infoDnsRecords;
-  responsedata: InfoDNSRecordsResponsedata;
+  responsedata: InfoDNSRecordsResponseData;
 }
 
-export interface InfoDNSRecordsResponsedata {
-  dnsrecords: Dnsrecord[];
+export interface InfoDNSRecordsResponseData {
+  dnsrecords: DnsRecord[];
 }
 
-export interface Dnsrecord {
+export interface DnsRecord {
   id: string;
   hostname: string;
   type: string;
