@@ -8,11 +8,14 @@ import {
   InfoDNSZoneRequest,
   LoginParam,
   LoginRequest,
+  UpdateDNSRecordsParam,
+  UpdateDNSRecordsRequest,
 } from './@types/Requests';
 import {
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
+  UpdateDNSRecordsResponse,
 } from './@types/Responses';
 import { getFormattedUrl } from './utils';
 
@@ -76,6 +79,18 @@ export default class NetcupRestApi {
       getFormattedUrl(this.format),
       {
         action: Actions.infoDnsRecords,
+        param: {
+          ...params,
+        },
+      },
+    );
+  }
+
+  public updateDnsRecords(params: UpdateDNSRecordsParam) {
+    return this.postJson<UpdateDNSRecordsRequest, UpdateDNSRecordsResponse>(
+      getFormattedUrl(this.format),
+      {
+        action: Actions.updateDnsRecords,
         param: {
           ...params,
         },

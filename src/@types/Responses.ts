@@ -23,7 +23,7 @@ export interface LoginResponsedata {
 export interface InfoDNSZoneResponse {
   serverrequestid: string;
   clientrequestid: string;
-  action: string;
+  action: Actions.infoDnsZone;
   status: string;
   statuscode: number;
   shortmessage: string;
@@ -58,4 +58,13 @@ export interface DnsRecord {
   destination: string;
   deleterecord: boolean;
   state: string;
+}
+
+export interface UpdateDNSRecordsResponse extends ApiResponse {
+  action: Actions.updateDnsRecords;
+  responsedata: UpdateDNSRecordsResponseData;
+}
+
+interface UpdateDNSRecordsResponseData {
+  dnsrecords: DnsRecord[];
 }

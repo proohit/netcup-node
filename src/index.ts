@@ -1,11 +1,16 @@
 import { Formats } from './@types/Formats';
 import { InitParams } from './@types/InitParams';
 import { NetcupAuth } from './@types/NetcupAuth';
-import { InfoDNSRecordsParam, InfoDNSZoneParam } from './@types/Requests';
+import {
+  InfoDNSRecordsParam,
+  InfoDNSZoneParam,
+  UpdateDNSRecordsParam,
+} from './@types/Requests';
 import {
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
+  UpdateDNSRecordsResponse,
 } from './@types/Responses';
 import NetcupRestApi from './api';
 import { INVALID_FORMAT_ERROR, NOT_INITIALIZED_ERROR } from './constants';
@@ -63,6 +68,18 @@ class NetcupApi {
   ): Promise<InfoDNSRecordsResponse> {
     await this.checkAndRefreshAuth();
     return this.restApi.infoDnsRecords({
+      apisessionid: this.authData.apiSessionId,
+      customernumber: this.authData.customerNumber,
+      apikey: this.authData.apiKey,
+      ...params,
+    });
+  }
+
+  public async updateDnsRecords(
+    params: Pick<UpdateDNSRecordsParam, 'dnsrecordset' | 'domainname'>,
+  ): Promise<UpdateDNSRecordsResponse> {
+    await this.checkAndRefreshAuth();
+    return this.restApi.updateDnsRecords({
       apisessionid: this.authData.apiSessionId,
       customernumber: this.authData.customerNumber,
       apikey: this.authData.apiKey,

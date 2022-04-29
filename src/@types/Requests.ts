@@ -1,3 +1,5 @@
+import { DnsRecord } from './Responses';
+
 export interface AuthParam {
   customernumber: string;
   apikey: string;
@@ -29,4 +31,14 @@ export interface LoginParam {
   apikey: string;
   apipassword: string;
   customernumber: string;
+}
+
+export interface UpdateDNSRecordsRequest {
+  action: string;
+  param: UpdateDNSRecordsParam;
+}
+
+export interface UpdateDNSRecordsParam extends AuthParam {
+  domainname: string;
+  dnsrecordset: { dnsrecords: DnsRecord[] };
 }
