@@ -20,6 +20,7 @@ A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API)
   - `login`
   - `infoDnsZone`
   - `infoDnsRecord`
+  - `updateDnsRecords`
 - error handling: on any response that isn't `2000` from Netcup, an error with the `longmessage` from Netcup is thrown
 
 ## Getting started
