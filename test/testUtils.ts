@@ -5,6 +5,7 @@ import {
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
+  UpdateDNSRecordsResponse,
 } from '../src/@types/Responses';
 import NetcupRestApi from '../src/api';
 
@@ -67,3 +68,12 @@ export function mockLoginResponse(api: NetcupRestApi) {
   };
   jest.spyOn(api, 'login').mockReturnValue(Promise.resolve(givenLoginResponse));
 }
+
+export const createEmptyUpdateDnsRecordsResponse =
+  (): UpdateDNSRecordsResponse => ({
+    ...createEmptyApiResponse<UpdateDNSRecordsResponse>(),
+    action: Actions.updateDnsRecords,
+    responsedata: {
+      dnsrecords: [],
+    },
+  });

@@ -3,11 +3,13 @@ import { InitParams } from '../src/@types/InitParams';
 import {
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
+  UpdateDNSRecordsResponse,
 } from '../src/@types/Responses';
 import { INVALID_FORMAT_ERROR, NOT_INITIALIZED_ERROR } from '../src/constants';
 import {
   createEmptyInfoDnsRecordsResponse,
   createEmptyInfoDnsZoneResponse,
+  createEmptyUpdateDnsRecordsResponse,
   givenSessionId,
   mockLoginResponse,
 } from './testUtils';
@@ -111,6 +113,52 @@ describe('exported functions', () => {
     it('should throw error on dns zone without auth', async () => {
       await expect(() =>
         new NetcupApi().infoDnsRecords({
+          domainname: '',
+        }),
+      ).rejects.toThrow(NOT_INITIALIZED_ERROR);
+    });
+  });
+
+  describe('updateDnsRecords tests', () => {
+    it('should correctly update dns records', async () => {
+      const netcupApi = new NetcupApi();
+      mockLoginResponse(netcupApi.restApi);
+      await netcupApi.init(givenAuthData);
+      const givenDnsRecordsUpdate: UpdateDNSRecordsResponse = {
+        ...createEmptyUpdateDnsRecordsResponse(),
+        responsedata: {
+          dnsrecords: [
+            {
+              id: '',
+              deleterecord: false,
+              hostname: 'test',
+              priority: '',
+              state: 'yes',
+              type: 'A',
+              destination: '@',
+            },
+          ],
+        },
+      };
+
+      jest
+        .spyOn(netcupApi.restApi, 'updateDnsRecords')
+        .mockReturnValue(Promise.resolve(givenDnsRecordsUpdate));
+      const updateDnsRecordsResult = await netcupApi.updateDnsRecords({
+        dnsrecordset: {
+          dnsrecords: [],
+        },
+        domainname: 'test.domain.com',
+      });
+      expect(updateDnsRecordsResult).toEqual(givenDnsRecordsUpdate);
+    });
+
+    it('should throw error on update dns records without auth', async () => {
+      await expect(() =>
+        new NetcupApi().updateDnsRecords({
+          dnsrecordset: {
+            dnsrecords: [],
+          },
           domainname: '',
         }),
       ).rejects.toThrow(NOT_INITIALIZED_ERROR);

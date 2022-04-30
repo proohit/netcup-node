@@ -3,6 +3,7 @@ import {
   ApiResponse,
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
+  UpdateDNSRecordsResponse,
 } from '../src/@types/Responses';
 import NetcupRestApi from '../src/api';
 import {
@@ -10,6 +11,7 @@ import {
   createEmptyInfoDnsRecordsResponse,
   createEmptyInfoDnsZoneResponse,
   createEmptyLoginResponse,
+  createEmptyUpdateDnsRecordsResponse,
 } from './testUtils';
 
 describe('Api functions', () => {
@@ -86,6 +88,52 @@ describe('Api functions', () => {
         apikey: 'testKey',
         apipassword: 'testPw',
         customernumber: '1234',
+      });
+      expect(res).toEqual(givenResponse);
+    });
+
+    it('updateDnsRecords', async () => {
+      const api = new NetcupRestApi();
+      const emptyResponse = createEmptyUpdateDnsRecordsResponse();
+      const givenResponse: UpdateDNSRecordsResponse = {
+        ...emptyResponse,
+        statuscode: 2000,
+        responsedata: {
+          ...emptyResponse.responsedata,
+          dnsrecords: [
+            {
+              id: '1',
+              hostname: 'www',
+              type: 'A',
+              state: 'yes',
+              priority: '',
+              deleterecord: false,
+              destination: '@',
+            },
+          ],
+        },
+      };
+      jest
+        .spyOn(api.axios, 'post')
+        .mockReturnValue(Promise.resolve({ data: givenResponse }));
+      const res = await api.updateDnsRecords({
+        domainname: 'test.com',
+        customernumber: '',
+        apikey: '',
+        apisessionid: '',
+        dnsrecordset: {
+          dnsrecords: [
+            {
+              id: '1',
+              hostname: 'www',
+              type: 'A',
+              state: 'yes',
+              priority: '',
+              deleterecord: false,
+              destination: '@',
+            },
+          ],
+        },
       });
       expect(res).toEqual(givenResponse);
     });
