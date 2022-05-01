@@ -264,5 +264,46 @@ describe('exported functions', () => {
         domainname: 'test.domain.com',
       });
     });
+    it('should correctly update dns records with current ip useIpv6Only', async () => {
+      const netcupApi = new NetcupApi();
+      const givenDnsRecordsUpdate: UpdateDNSRecordsResponse = {
+        ...createEmptyUpdateDnsRecordsResponse(),
+        responsedata: {
+          dnsrecords: [
+            {
+              id: '',
+              deleterecord: false,
+              hostname: 'test',
+              priority: '',
+              state: 'yes',
+              type: 'AAAA',
+              destination: 'testIpv6',
+            },
+          ],
+        },
+      };
+
+      const spyFn = jest.spyOn(netcupApi, 'updateDnsRecords');
+      spyFn.mockReturnValue(Promise.resolve(givenDnsRecordsUpdate));
+      const updateDnsRecordsResult =
+        await netcupApi.updateDnsRecordWithCurrentIp({
+          domainname: 'test.domain.com',
+          hostname: 'test',
+          useIpv6Only: true,
+        });
+      expect(updateDnsRecordsResult).toEqual(givenDnsRecordsUpdate);
+      expect(spyFn).toHaveBeenCalledWith({
+        dnsrecordset: {
+          dnsrecords: [
+            {
+              hostname: 'test',
+              type: 'AAAA',
+              destination: 'testIpv6',
+            },
+          ],
+        },
+        domainname: 'test.domain.com',
+      });
+    });
   });
 });
