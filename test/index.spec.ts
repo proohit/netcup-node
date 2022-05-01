@@ -13,7 +13,10 @@ import {
   givenSessionId,
   mockLoginResponse,
 } from './testUtils';
-
+jest.mock('public-ip', () => ({
+  __esModule: true, // this property makes it work,
+  default: { v4: () => 'testIpv4', v6: () => 'testIpv6' },
+}));
 describe('exported functions', () => {
   const givenAuthData: InitParams = {
     apikey: 'testKey',
@@ -162,6 +165,104 @@ describe('exported functions', () => {
           domainname: '',
         }),
       ).rejects.toThrow(NOT_INITIALIZED_ERROR);
+    });
+  });
+
+  describe('updateDnsRecordWithCurrentIp tests', () => {
+    it('should correctly update dns records with current ip', async () => {
+      const netcupApi = new NetcupApi();
+      const givenDnsRecordsUpdate: UpdateDNSRecordsResponse = {
+        ...createEmptyUpdateDnsRecordsResponse(),
+        responsedata: {
+          dnsrecords: [
+            {
+              id: '',
+              deleterecord: false,
+              hostname: 'test',
+              priority: '',
+              state: 'yes',
+              type: 'A',
+              destination: 'testIpv4',
+            },
+          ],
+        },
+      };
+
+      const spyFn = jest.spyOn(netcupApi, 'updateDnsRecords');
+      spyFn.mockReturnValue(Promise.resolve(givenDnsRecordsUpdate));
+      const updateDnsRecordsResult =
+        await netcupApi.updateDnsRecordWithCurrentIp({
+          domainname: 'test.domain.com',
+          hostname: 'test',
+        });
+      expect(updateDnsRecordsResult).toEqual(givenDnsRecordsUpdate);
+      expect(spyFn).toHaveBeenCalledWith({
+        dnsrecordset: {
+          dnsrecords: [
+            {
+              hostname: 'test',
+              type: 'A',
+              destination: 'testIpv4',
+            },
+          ],
+        },
+        domainname: 'test.domain.com',
+      });
+    });
+    it('should correctly update dns records with current ip with ipv6', async () => {
+      const netcupApi = new NetcupApi();
+      const givenDnsRecordsUpdate: UpdateDNSRecordsResponse = {
+        ...createEmptyUpdateDnsRecordsResponse(),
+        responsedata: {
+          dnsrecords: [
+            {
+              id: '',
+              deleterecord: false,
+              hostname: 'test',
+              priority: '',
+              state: 'yes',
+              type: 'A',
+              destination: 'testIpv4',
+            },
+            {
+              id: '',
+              deleterecord: false,
+              hostname: 'test',
+              priority: '',
+              state: 'yes',
+              type: 'AAAA',
+              destination: 'testIpv6',
+            },
+          ],
+        },
+      };
+
+      const spyFn = jest.spyOn(netcupApi, 'updateDnsRecords');
+      spyFn.mockReturnValue(Promise.resolve(givenDnsRecordsUpdate));
+      const updateDnsRecordsResult =
+        await netcupApi.updateDnsRecordWithCurrentIp({
+          domainname: 'test.domain.com',
+          hostname: 'test',
+          useIpv4AndIpv6: true,
+        });
+      expect(updateDnsRecordsResult).toEqual(givenDnsRecordsUpdate);
+      expect(spyFn).toHaveBeenCalledWith({
+        dnsrecordset: {
+          dnsrecords: [
+            {
+              hostname: 'test',
+              type: 'A',
+              destination: 'testIpv4',
+            },
+            {
+              hostname: 'test',
+              type: 'AAAA',
+              destination: 'testIpv6',
+            },
+          ],
+        },
+        domainname: 'test.domain.com',
+      });
     });
   });
 });
