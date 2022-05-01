@@ -42,3 +42,11 @@ export interface UpdateDNSRecordsParam extends AuthParam {
   domainname: string;
   dnsrecordset: { dnsrecords: DnsRecord[] };
 }
+
+export type UpdateDnsRecordWithCurrentIpParams =
+  // enforce domainname
+  Pick<UpdateDNSRecordsParam, 'domainname'> &
+    // omit id, type, state and desination
+    Omit<DnsRecord, 'id' | 'type' | 'state' | 'destination'> & {
+      useIpv4AndIpv6?: boolean;
+    };

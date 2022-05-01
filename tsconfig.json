@@ -3,7 +3,6 @@
     "target": "es6",
     "module": "es6",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
     "allowJs": true,
     "importHelpers": true,

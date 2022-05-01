@@ -51,13 +51,13 @@ export interface InfoDNSRecordsResponseData {
 }
 
 export interface DnsRecord {
-  id: string;
+  id?: string;
   hostname: string;
   type: string;
-  priority: string;
+  priority?: string;
   destination: string;
-  deleterecord: boolean;
-  state: string;
+  deleterecord?: boolean;
+  state?: string;
 }
 
 export interface UpdateDNSRecordsResponse extends ApiResponse {

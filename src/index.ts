@@ -1,3 +1,4 @@
+import publicIp from 'public-ip';
 import { Formats } from './@types/Formats';
 import { InitParams } from './@types/InitParams';
 import { NetcupAuth } from './@types/NetcupAuth';
@@ -5,8 +6,10 @@ import {
   InfoDNSRecordsParam,
   InfoDNSZoneParam,
   UpdateDNSRecordsParam,
+  UpdateDnsRecordWithCurrentIpParams,
 } from './@types/Requests';
 import {
+  DnsRecord,
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
@@ -85,6 +88,34 @@ class NetcupApi {
       apikey: this.authData.apiKey,
       ...params,
     });
+  }
+
+  public async updateDnsRecordWithCurrentIp(
+    params: UpdateDnsRecordWithCurrentIpParams,
+  ): Promise<UpdateDNSRecordsResponse> {
+    const ipv4 = await publicIp.v4({ onlyHttps: true });
+    const ipv4Record: DnsRecord = {
+      type: 'A',
+      hostname: params.hostname,
+      destination: ipv4,
+    };
+    if (params.useIpv4AndIpv6) {
+      const ipv6 = await publicIp.v6({ onlyHttps: true });
+      const ipv6Record: DnsRecord = {
+        type: 'AAAA',
+        hostname: params.hostname,
+        destination: ipv6,
+      };
+      return this.updateDnsRecords({
+        domainname: params.domainname,
+        dnsrecordset: { dnsrecords: [ipv4Record, ipv6Record] },
+      });
+    } else {
+      return this.updateDnsRecords({
+        dnsrecordset: { dnsrecords: [ipv4Record] },
+        domainname: params.domainname,
+      });
+    }
   }
 
   public getAuthData(): NetcupAuth {
