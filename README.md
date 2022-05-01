@@ -21,6 +21,7 @@ A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API)
   - `infoDnsZone`
   - `infoDnsRecord`
   - `updateDnsRecords`
+  - `updateDnsRecordWithCurrentIp` to set the current public ip as destination. Works with ipv4 and ipv6. Default updates ipv4 only. Set parameter `useIpv6Only` to true to update ipv6 only. Set parameter `useIpv4AndIpv6` to true to update both ipv4 and ipv6. NOTE: Uses `public-ip` package to get the current public ip.
 - error handling: on any response that isn't `2000` from Netcup, an error with the `longmessage` from Netcup is thrown
 
 ## Getting started
