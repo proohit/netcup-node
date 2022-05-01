@@ -93,12 +93,26 @@ class NetcupApi {
   public async updateDnsRecordWithCurrentIp(
     params: UpdateDnsRecordWithCurrentIpParams,
   ): Promise<UpdateDNSRecordsResponse> {
+    if (params.useIpv6Only) {
+      const ipv6 = await publicIp.v6({ onlyHttps: true });
+      const ipv6Record: DnsRecord = {
+        type: 'AAAA',
+        hostname: params.hostname,
+        destination: ipv6,
+      };
+      return this.updateDnsRecords({
+        domainname: params.domainname,
+        dnsrecordset: { dnsrecords: [ipv6Record] },
+      });
+    }
+
     const ipv4 = await publicIp.v4({ onlyHttps: true });
     const ipv4Record: DnsRecord = {
       type: 'A',
       hostname: params.hostname,
       destination: ipv4,
     };
+
     if (params.useIpv4AndIpv6) {
       const ipv6 = await publicIp.v6({ onlyHttps: true });
       const ipv6Record: DnsRecord = {
@@ -110,12 +124,12 @@ class NetcupApi {
         domainname: params.domainname,
         dnsrecordset: { dnsrecords: [ipv4Record, ipv6Record] },
       });
-    } else {
-      return this.updateDnsRecords({
-        dnsrecordset: { dnsrecords: [ipv4Record] },
-        domainname: params.domainname,
-      });
     }
+
+    return this.updateDnsRecords({
+      dnsrecordset: { dnsrecords: [ipv4Record] },
+      domainname: params.domainname,
+    });
   }
 
   public getAuthData(): NetcupAuth {

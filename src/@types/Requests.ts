@@ -48,5 +48,6 @@ export type UpdateDnsRecordWithCurrentIpParams =
   Pick<UpdateDNSRecordsParam, 'domainname'> &
     // omit id, type, state and desination
     Omit<DnsRecord, 'id' | 'type' | 'state' | 'destination'> & {
+      useIpv6Only?: boolean;
       useIpv4AndIpv6?: boolean;
     };
