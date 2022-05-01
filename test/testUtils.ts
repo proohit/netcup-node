@@ -2,6 +2,7 @@ import { Actions } from '../src/@types/Actions';
 import { LoginParam } from '../src/@types/Requests';
 import {
   ApiResponse,
+  DnsRecord,
   InfoDNSRecordsResponse,
   InfoDNSZoneResponse,
   LoginResponse,
@@ -77,3 +78,13 @@ export const createEmptyUpdateDnsRecordsResponse =
       dnsrecords: [],
     },
   });
+
+export const emptyDnsRecord: DnsRecord = {
+  id: '',
+  deleterecord: false,
+  hostname: '',
+  priority: '',
+  state: '',
+  type: '',
+  destination: '',
+};

@@ -10,6 +10,7 @@ import {
   createEmptyInfoDnsRecordsResponse,
   createEmptyInfoDnsZoneResponse,
   createEmptyUpdateDnsRecordsResponse,
+  emptyDnsRecord,
   givenSessionId,
   mockLoginResponse,
 } from './testUtils';
@@ -176,11 +177,8 @@ describe('exported functions', () => {
         responsedata: {
           dnsrecords: [
             {
-              id: '',
-              deleterecord: false,
+              ...emptyDnsRecord,
               hostname: 'test',
-              priority: '',
-              state: 'yes',
               type: 'A',
               destination: 'testIpv4',
             },
@@ -216,20 +214,14 @@ describe('exported functions', () => {
         responsedata: {
           dnsrecords: [
             {
-              id: '',
-              deleterecord: false,
+              ...emptyDnsRecord,
               hostname: 'test',
-              priority: '',
-              state: 'yes',
               type: 'A',
               destination: 'testIpv4',
             },
             {
-              id: '',
-              deleterecord: false,
+              ...emptyDnsRecord,
               hostname: 'test',
-              priority: '',
-              state: 'yes',
               type: 'AAAA',
               destination: 'testIpv6',
             },
@@ -271,11 +263,8 @@ describe('exported functions', () => {
         responsedata: {
           dnsrecords: [
             {
-              id: '',
-              deleterecord: false,
+              ...emptyDnsRecord,
               hostname: 'test',
-              priority: '',
-              state: 'yes',
               type: 'AAAA',
               destination: 'testIpv6',
             },
