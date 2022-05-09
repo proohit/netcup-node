@@ -36,7 +36,8 @@
     "access": "public"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "src/**/*"
   ],
   "dependencies": {
     "axios": "^0.27.2",
