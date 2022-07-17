@@ -61,7 +61,7 @@
     "version-bump-prompt": "^6.1.0"
   },
   "engines": {
-    "node": ">= 12.20 <15"
+    "node": ">= 12.20"
   },
   "volta": {
     "node": "12.20.0"
