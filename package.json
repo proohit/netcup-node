@@ -16,14 +16,12 @@
     "netcup",
     "ccp"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "module",
   "scripts": {
-    "start": "node lib/index.js",
-    "clean": "rimraf coverage build lib tmp",
-    "prebuild": "npm run clean",
-    "build": "tsc -p tsconfig.release.json && tsc-esm-fix --target=lib/",
+    "prebuild": "rimraf lib",
+    "build": "npm run build:esm & npm run build:cjs",
+    "postbuild": "hybrid-package-json --target-esm lib/esm --target-cjs lib/cjs",
+    "build:esm": "tsc -p tsconfig.esm.json && tsc-esm-fix --target=lib/esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
@@ -35,9 +33,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/types/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib"
   ],
+  "exports": {
+    "import": "./lib/esm/index.js",
+    "require": "./lib/cjs/index.js"
+  },
   "dependencies": {
     "axios": "^0.27.2",
     "public-ip": "^5.0.0",
@@ -51,6 +57,7 @@
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.1.5",
+    "hybrid-package-json": "^0.0.1",
     "jest": "^27.5.1",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
@@ -62,8 +69,5 @@
   },
   "engines": {
     "node": ">= 12.20"
-  },
-  "volta": {
-    "node": "12.20.0"
   }
 }

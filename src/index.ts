@@ -1,4 +1,3 @@
-import publicIp from 'public-ip';
 import { Formats } from './@types/Formats';
 import { InitParams } from './@types/InitParams';
 import { NetcupAuth } from './@types/NetcupAuth';
@@ -93,6 +92,7 @@ class NetcupApi {
   public async updateDnsRecordWithCurrentIp(
     params: UpdateDnsRecordWithCurrentIpParams,
   ): Promise<UpdateDNSRecordsResponse> {
+    const publicIp = (await import('public-ip')).default;
     if (params.useIpv6Only) {
       const ipv6 = await publicIp.v6({ onlyHttps: true });
       const ipv6Record: DnsRecord = {
@@ -139,11 +139,7 @@ class NetcupApi {
 
 // EXPORTS
 
-export * from './@types/Formats';
-export * from './@types/InitParams';
-export * from './@types/NetcupAuth';
-export * from './@types/Requests';
-export * from './@types/Responses';
-export { NetcupRestApi };
+export * from './@types';
+export { NetcupRestApi, NetcupApi };
 
 export default NetcupApi;
