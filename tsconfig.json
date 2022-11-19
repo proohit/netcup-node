@@ -9,6 +9,7 @@
     "declarationDir": "lib/types",
     "importHelpers": true,
     "alwaysStrict": true,
+    "removeComments": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": false,

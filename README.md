@@ -57,9 +57,11 @@ After logging in to [Netcup CCP](https://www.customercontrolpanel.de/), navigate
 
 The default exported `NetcupApi` is a wrapper around the actual api. It handles authentication and passes parameters to the implemented api.
 
+#### ESM
+
 ```javascript
 import NetcupApi from 'netcup-node';
-const api = await new Netcup().init({
+const api = await new NetcupApi().init({
   apikey: 'YOUR_API_KEY',
   apipassword: 'YOUR_API_PASSWORD',
   customernumber: 'YOUR_CUSTOMER_NUMBER',
@@ -82,5 +84,97 @@ const dnsRecords = await api.infoDnsRecords({
   apikey: 'YOUR_API_KEY',
   customernumber: 'YOUR_CUSTOMER_NUMBER',
   domainname: 'YOUR.DOMAIN',
+});
+```
+
+#### CJS
+
+```javascript
+const NetcupApi = require('netcup-node').default;
+// or const { NetcupApi } = require('netcup-node');
+
+const api = await new NetcupApi().init({
+  apikey: 'YOUR_API_KEY',
+  apipassword: 'YOUR_API_PASSWORD',
+  customernumber: 'YOUR_CUSTOMER_NUMBER',
+});
+const dnsInfo = await api.infoDnsZone({ domainname: 'YOUR.DOMAIN' });
+```
+
+### Reference
+
+```javascript
+/**
+ * Initializes authentication parameters
+ */
+NetcupApi.init({
+  apikey: 'YOUR_API_KEY',
+  apipassword: 'YOUR_API_PASSWORD',
+  customernumber: 'YOUR_CUSTOMER_NUMBER',
+});
+
+/**
+ * Retrieves information about a DNS zone
+ * */
+NetcupApi.infoDnsZone({
+  domainname: 'YOUR.DOMAIN',
+});
+
+/**
+ * Retrieves information about DNS records of a domain
+ * */
+NetcupApi.infoDnsRecords({
+  domainname: 'YOUR.DOMAIN',
+});
+
+/**
+ * Updates DNS records of a domain and only those that are specified.
+ */
+NetcupApi.updateDnsRecords({
+  domainname: 'example.com',
+  dnsrecordset: {
+    dnsrecords: [{ name: 'www', type: 'A', destination: 'some-ip' }],
+  },
+});
+// can also be used for deletion
+NetcupApi.updateDnsRecords({
+  domainname: 'example.com',
+  dnsrecordset: {
+    dnsrecords: [
+      { name: 'www', type: 'A', destination: 'some-ip', deleterecord: true },
+    ],
+  },
+});
+
+/**
+ * Updates DNS records of a domain with the current public ip.
+ * @example
+ * // update ipv4 only
+ * await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }] })
+ * @example
+ *  // update ipv4 and ipv6
+ *  await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }], useIpv4AndIpv6: true })
+ * @example
+ * // update ipv6 only
+ * await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }], useIpv6Only: true })
+ */
+// update ipv4 only
+NetcupApi.updateDnsRecordWithCurrentIp({
+  domainname: 'example.com',
+  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+});
+
+// update ipv4 and ipv6
+NetcupApi.updateDnsRecordWithCurrentIp({
+  domainname: 'example.com',
+  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+  useIpv4AndIpv6: true,
+});
+
+// update ipv6 only
+NetcupApi.updateDnsRecordWithCurrentIp({
+  domainname: 'example.com',
+  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+  useIpv6Only: true,
 });
 ```

@@ -40,6 +40,9 @@ class NetcupApi {
     }
   }
 
+  /**
+   * Initializes authentication parameters
+   */
   public async init(params: InitParams): Promise<NetcupApi> {
     if (params.format && !Object.values(Formats).includes(params.format)) {
       throw new Error(INVALID_FORMAT_ERROR);
@@ -53,6 +56,10 @@ class NetcupApi {
     return this;
   }
 
+  /**
+   * Returns information about the DNS zone of a domain
+   * @example await api.infoDnsZone({ domainname: 'example.com' })
+   */
   public async infoDnsZone(
     params: Pick<InfoDNSZoneParam, 'domainname'>,
   ): Promise<InfoDNSZoneResponse> {
@@ -65,6 +72,10 @@ class NetcupApi {
     });
   }
 
+  /**
+   * Returns information about the DNS records of a domain
+   * @example await api.infoDnsRecords({ domainname: 'example.com' })
+   */
   public async infoDnsRecords(
     params: Pick<InfoDNSRecordsParam, 'domainname'>,
   ): Promise<InfoDNSRecordsResponse> {
@@ -77,6 +88,26 @@ class NetcupApi {
     });
   }
 
+  /**
+   * Updates DNS records of a domain and only those that are specified.
+   * @example
+   *  await api.updateDnsRecords({
+        domainname: 'example.com',
+        dnsrecordset: {
+          dnsrecords: [{ name: 'www', type: 'A', destination: 'some-ip' }],
+        },
+      })
+   * @example
+   * // can also be used to delete records
+   * await api.updateDnsRecords({
+      domainname: 'example.com',
+      dnsrecordset: {
+        dnsrecords: [
+          { name: 'www', type: 'A', destination: 'some-ip', deleterecord: true },
+        ],
+      },
+    })
+   */
   public async updateDnsRecords(
     params: Pick<UpdateDNSRecordsParam, 'dnsrecordset' | 'domainname'>,
   ): Promise<UpdateDNSRecordsResponse> {
@@ -89,6 +120,29 @@ class NetcupApi {
     });
   }
 
+  /**
+   * Updates DNS records of a domain with the current public ip.
+   * @example
+   * // update ipv4 only
+   * await api.updateDnsRecordsWithCurrentIp({
+      domainname: 'example.com',
+      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+    })
+   * @example
+   *  // update ipv4 and ipv6
+   *  await api.updateDnsRecordsWithCurrentIp({
+      domainname: 'example.com',
+      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+      useIpv4AndIpv6: true,
+    })
+   * @example
+   * // update ipv6 only
+   * await api.updateDnsRecordsWithCurrentIp({
+      domainname: 'example.com',
+      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+      useIpv6Only: true,
+    })
+   */
   public async updateDnsRecordWithCurrentIp(
     params: UpdateDnsRecordWithCurrentIpParams,
   ): Promise<UpdateDNSRecordsResponse> {
@@ -136,8 +190,6 @@ class NetcupApi {
     return this.authData;
   }
 }
-
-// EXPORTS
 
 export * from './@types';
 export { NetcupRestApi, NetcupApi };
