@@ -2,5 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "lib/esm"
-  }
+  },
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
 }
