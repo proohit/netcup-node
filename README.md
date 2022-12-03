@@ -12,6 +12,8 @@
 
 A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API).
 
+Docs: [https://proohit.github.io/netcup-node/](https://proohit.github.io/netcup-node/)
+
 ## Current support
 
 - only [JSON Rest API](https://www.netcup-wiki.de/wiki/CCP_API#Anmerkungen_zu_JSON-Requests), no SOAP yet
@@ -99,82 +101,4 @@ const api = await new NetcupApi().init({
   customernumber: 'YOUR_CUSTOMER_NUMBER',
 });
 const dnsInfo = await api.infoDnsZone({ domainname: 'YOUR.DOMAIN' });
-```
-
-### Reference
-
-```javascript
-/**
- * Initializes authentication parameters
- */
-NetcupApi.init({
-  apikey: 'YOUR_API_KEY',
-  apipassword: 'YOUR_API_PASSWORD',
-  customernumber: 'YOUR_CUSTOMER_NUMBER',
-});
-
-/**
- * Retrieves information about a DNS zone
- * */
-NetcupApi.infoDnsZone({
-  domainname: 'YOUR.DOMAIN',
-});
-
-/**
- * Retrieves information about DNS records of a domain
- * */
-NetcupApi.infoDnsRecords({
-  domainname: 'YOUR.DOMAIN',
-});
-
-/**
- * Updates DNS records of a domain and only those that are specified.
- */
-NetcupApi.updateDnsRecords({
-  domainname: 'example.com',
-  dnsrecordset: {
-    dnsrecords: [{ name: 'www', type: 'A', destination: 'some-ip' }],
-  },
-});
-// can also be used for deletion
-NetcupApi.updateDnsRecords({
-  domainname: 'example.com',
-  dnsrecordset: {
-    dnsrecords: [
-      { name: 'www', type: 'A', destination: 'some-ip', deleterecord: true },
-    ],
-  },
-});
-
-/**
- * Updates DNS records of a domain with the current public ip.
- * @example
- * // update ipv4 only
- * await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }] })
- * @example
- *  // update ipv4 and ipv6
- *  await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }], useIpv4AndIpv6: true })
- * @example
- * // update ipv6 only
- * await api.updateDnsRecordsWithCurrentIp({ domainname: 'example.com', dnsrecords: [{ hostname: 'www' }], useIpv6Only: true })
- */
-// update ipv4 only
-NetcupApi.updateDnsRecordWithCurrentIp({
-  domainname: 'example.com',
-  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
-});
-
-// update ipv4 and ipv6
-NetcupApi.updateDnsRecordWithCurrentIp({
-  domainname: 'example.com',
-  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
-  useIpv4AndIpv6: true,
-});
-
-// update ipv6 only
-NetcupApi.updateDnsRecordWithCurrentIp({
-  domainname: 'example.com',
-  dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
-  useIpv6Only: true,
-});
 ```
