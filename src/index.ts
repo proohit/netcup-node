@@ -61,7 +61,7 @@ class NetcupApi {
    * @example await api.infoDnsZone({ domainname: 'example.com' })
    */
   public async infoDnsZone(
-    params: Pick<InfoDNSZoneParam, 'domainname'>,
+    params: InfoDNSZoneParam,
   ): Promise<InfoDNSZoneResponse> {
     await this.checkAndRefreshAuth();
     return this.restApi.infoDnsZone({
@@ -77,7 +77,7 @@ class NetcupApi {
    * @example await api.infoDnsRecords({ domainname: 'example.com' })
    */
   public async infoDnsRecords(
-    params: Pick<InfoDNSRecordsParam, 'domainname'>,
+    params: InfoDNSRecordsParam,
   ): Promise<InfoDNSRecordsResponse> {
     await this.checkAndRefreshAuth();
     return this.restApi.infoDnsRecords({
@@ -109,7 +109,7 @@ class NetcupApi {
     })
    */
   public async updateDnsRecords(
-    params: Pick<UpdateDNSRecordsParam, 'dnsrecordset' | 'domainname'>,
+    params: UpdateDNSRecordsParam,
   ): Promise<UpdateDNSRecordsResponse> {
     await this.checkAndRefreshAuth();
     return this.restApi.updateDnsRecords({
@@ -126,20 +126,20 @@ class NetcupApi {
    * // update ipv4 only
    * await api.updateDnsRecordsWithCurrentIp({
       domainname: 'example.com',
-      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+      hostname: 'www',
     })
    * @example
    *  // update ipv4 and ipv6
    *  await api.updateDnsRecordsWithCurrentIp({
       domainname: 'example.com',
-      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+      hostname: 'www',
       useIpv4AndIpv6: true,
     })
    * @example
    * // update ipv6 only
    * await api.updateDnsRecordsWithCurrentIp({
       domainname: 'example.com',
-      dnsrecordset: { dnsrecords: [{ hostname: 'www' }] },
+      hostname: 'www',
       useIpv6Only: true,
     })
    */

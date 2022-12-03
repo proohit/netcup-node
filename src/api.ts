@@ -10,6 +10,7 @@ import {
   LoginRequest,
   UpdateDNSRecordsParam,
   UpdateDNSRecordsRequest,
+  WithAuthentication,
 } from './@types/Requests';
 import {
   InfoDNSRecordsResponse,
@@ -62,7 +63,7 @@ export default class NetcupRestApi {
     );
   }
 
-  public infoDnsZone(params: InfoDNSZoneParam) {
+  public infoDnsZone(params: WithAuthentication<InfoDNSZoneParam>) {
     return this.postJson<InfoDNSZoneRequest, InfoDNSZoneResponse>(
       getFormattedUrl(this.format),
       {
@@ -74,7 +75,7 @@ export default class NetcupRestApi {
     );
   }
 
-  public infoDnsRecords(params: InfoDNSRecordsParam) {
+  public infoDnsRecords(params: WithAuthentication<InfoDNSRecordsParam>) {
     return this.postJson<InfoDNSRecordsRequest, InfoDNSRecordsResponse>(
       getFormattedUrl(this.format),
       {
@@ -86,7 +87,7 @@ export default class NetcupRestApi {
     );
   }
 
-  public updateDnsRecords(params: UpdateDNSRecordsParam) {
+  public updateDnsRecords(params: WithAuthentication<UpdateDNSRecordsParam>) {
     return this.postJson<UpdateDNSRecordsRequest, UpdateDNSRecordsResponse>(
       getFormattedUrl(this.format),
       {

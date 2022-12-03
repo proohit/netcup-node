@@ -52,10 +52,27 @@ export interface InfoDNSRecordsResponseData {
 
 export interface DnsRecord {
   id?: string;
+  /**
+   * The name of the DNS record. If the record is a subdomain, the name is the subdomain name.
+   * @example "www"
+   */
   hostname: string;
+  /**
+   * The type of the DNS record.
+   * @example "A"
+   * @example "AAAA"
+   */
   type: string;
   priority?: string;
+  /**
+   * The destination of the DNS record. For A and AAAA records, this is the IP address.
+   * @example "192.168.178.1"
+   * @example "2000::1"
+   */
   destination: string;
+  /**
+   * Indicates whether the DNS record should be deleted.
+   */
   deleterecord?: boolean;
   state?: string;
 }
