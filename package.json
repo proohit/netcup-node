@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "prebuild": "rimraf lib",
-    "build": "npm run build:esm & npm run build:cjs",
+    "build": "npm run build:esm && npm run build:cjs",
     "postbuild": "hybrid-package-json --target-esm lib/esm --target-cjs lib/cjs",
     "build:esm": "tsc -p tsconfig.esm.json && tsc-esm-fix --target=lib/esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
