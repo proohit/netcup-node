@@ -12,7 +12,7 @@
 
 A node wrapper for the [Netcup CCP API](https://www.netcup-wiki.de/wiki/CCP_API).
 
-Docs: [https://proohit.github.io/netcup-node/](https://proohit.github.io/netcup-node/)
+Docs: [https://proohit.github.io/netcup-node/](https://proohit.github.io/netcup-node/classes/NetcupApi.html)
 
 ## Current support
 
