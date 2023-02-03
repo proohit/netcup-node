@@ -36,15 +36,15 @@
     "access": "public"
   },
   "type": "module",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/types/index.d.ts",
+  "main": "lib/cjs/src/index.js",
+  "module": "lib/esm/src/index.js",
+  "types": "lib/types/src/index.d.ts",
   "files": [
     "lib"
   ],
   "exports": {
-    "import": "./lib/esm/index.js",
-    "require": "./lib/cjs/index.js"
+    "import": "./lib/esm/src/index.js",
+    "require": "./lib/cjs/src/index.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
